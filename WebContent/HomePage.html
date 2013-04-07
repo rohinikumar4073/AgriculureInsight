@@ -1,0 +1,472 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Agriculture Insights</title>
+<style>
+.headingbanner {
+	height: 60px;
+	padding-top: 25px;
+	background: #FF3918;
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+#filterContainer {
+	background: none repeat scroll 0 0 #D9C688;
+	border-color: #D9C688;
+	border-style: solid;
+	padding: 10px 10px 10px 20px;
+}
+
+#filterHeader {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.heading {
+	color: #00000;
+	padding-left: 25px;
+	font-weight: bold;
+	font-size: 24px;
+	font-family: calibri, sans-serif;
+}
+
+#graph {
+	margin: 10px;
+}
+
+.tabs {
+	background: none repeat scroll 0 0 #D9BFA0;
+	color: #181612;
+	height: 25px;
+	padding-bottom: 5px;
+	padding-left: 14px;
+	padding-top: 5px;
+}
+
+#bottom {
+	background: #D9BFA0;
+	height: 25px;
+}
+
+#pageContainer {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border-color: #D9BFA0;
+	border-left: 20px solid #D9BFA0;
+	border-right: 20px solid #D9BFA0;
+	border-style: solid;
+	padding-top: 10px;
+}
+
+.tabcontent {
+	background-image: url("images/11.png");
+	padding-left: 20px;
+	padding-top: 1px;
+	padding-bottom: 2px;
+	padding-right: 20px;
+	font-weight: bold;
+	font-size: 16px;
+	font-family: calibri, sans-serif;
+}
+
+#container {
+	font-family: verdana;
+}
+
+#graphHeading {
+	color: #FFFFFF;
+	font-weight: bold;
+	background: none repeat scroll 0 0 #181612;
+	padding: 5px;
+	padding-left: 10px;
+	height: inherit;
+}
+
+#left {
+	border-style: solid;
+	background: #ffffff;
+	border-color: #181612;
+	display: inline;
+
+	border-width: 2px;
+}
+
+#right {
+	border-style: solid;
+	border-width: 2px;
+	background: #ffffff;
+	border-color: #181612;
+	background: #ffffff;
+}
+
+#selectyear {
+	margin-top: 10px;
+	display:inline;
+	padding:20px;
+}
+
+#stateSelector {
+	margin-top: 5px;
+	display:inline;
+	padding:20px;
+}
+</style>
+<script type="text/javascript" src="JS/jquery.js"></script>
+<script type="text/javascript" src="JS/jquery.min.js"></script>
+
+<script type="text/javascript" src="JS/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="JS/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="JS/jqplot.highlighter.min.js"></script>
+<script type="text/javascript" src="JS/jqplot.cursor.min.js"></script>
+<script type="text/javascript" src="JS/jqplot.pointLabels.min.js"></script>
+<link rel="stylesheet" type="text/css" hrf="CSS/jquery.jqplot.min.css" />
+
+</head>
+<body>
+	<div id="container">
+		<div class="headingbanner">
+			<img alt="icon" src="images/icons.png" height="60px" width="60px"
+				align="middle"> <span class="heading"> Agriculture
+				Insights </span>
+		</div>
+		<div class="tabs">
+			<a class="tabcontent" href="HomePage.html"> Rice </a> <a class="tabcontent"
+				style="padding-right: 10px; padding-left: 15px;" href="Wheat.html"> Wheat</a> <a
+				class="tabcontent"> Ragi</a> <a class="tabcontent"> Bajra </a>
+
+		</div>
+		<div id="pageContainer">
+
+			<div id="graph">
+				<div id="graphHeading">Price variations in Rice for the last
+					decade</div>
+				<div id="left">
+					<div id="filterContainer">
+						<div id="filterHeader"  style="padding-top: 3px;display:inline">Filters</div>
+						<div id="selectyear">
+							<div  style="padding-top: 3px;display:inline">Select Year</div>
+							<div style="display: inline">
+								<select id="years"><option></option></select>
+							</div>
+						</div>
+						<div id="stateSelector" >
+							<div style="display:inline">Select State</div>
+							<div style="padding-top: 3px;display: inline">
+								<select id="states"><option></option></select>
+							</div>
+						</div>
+						<div id="districtSeltor" style="display:inline;padding:20px">
+							<div style="display:inline">Select District</div>
+							<div style="padding-top: 3px;display: inline" >
+								<select id="districtSelect" ><option></option></select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="right">
+<div id="chart1" class="jqplot-target" style="width: 700px; height: 300px; position: relative;">
+				
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+	<div id="bottom"></div>
+</body>
+<script type="text/javascript">
+	var select = document.getElementsByTagName('select')[1];
+	select.options.length = 0; // clear out existing items
+	var a = [ "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar",
+			"Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh",
+			"Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala",
+			"Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
+			"Nagaland", "Odisha", "Puducherry", "Punjab", "Rajasthan",
+			"Sikkim", "Tamil Nadu", "Tripura", "Uttarakhand", "Uttar Pradesh",
+			"West Bengal" ];
+	for ( var i = 0; i < a.length; i++) {
+		var d = a[i];
+		select.options.add(new Option(d, d));
+	}
+
+	var select = document.getElementsByTagName('select')[0];
+	select.options.length = 0; // clear out existing items
+	var b = [ "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008",
+			"2009", "2010" ];
+	for ( var i = 0; i < b.length; i++) {
+		var d = b[i];
+		select.options.add(new Option(d, d));
+	}
+
+	$("#states").change(function() {
+		var year = $("#years").val();
+		var url = "data/" + "agmarkrice" + year + ".csv";
+		$.ajax({
+			type : "GET",
+			url : url,
+			complete : function(data) {
+				// Handle the complete event
+				if (data.readyState === 4) {
+					processData(data.responseText);
+				}
+			}
+		});
+	});
+
+	function processData(allText) {
+		var selectedState = $("#states").val();
+		var record_num = 9; // or however many elements there are in each row
+		var entries = allText.split(/\r\n|\n/);
+		var lines = [];
+		var obj = {};
+		var headings = entries.splice(0, 1);
+		var ttemp = true;
+		var tarr = [];
+		for ( var i = 0; i < entries.length; i++) {
+			if (!ttemp)
+				break;
+			var line = entries[i].split(",");
+			var temp = false;
+				if (selectedState == line[0]) {
+					tarr.push(line);
+					temp = true;
+				} else if (temp) {
+					ttemp = false;
+					break;
+				}
+			
+
+		}
+		if(tarr.length>0){
+		var select = document.getElementsByTagName('select')[2];
+		select.options.length = 0; // clear out existing items
+		var destDist={};
+		var samp1=[];
+		var samp2=[];
+		var samp3=[];
+		var samp4=[];
+        var i=0;
+
+		for ( var i = 0; i < tarr.length; i++) {
+			 samp1.push([i,tarr[i][8]]);
+			 samp2.push([i,tarr[i][8]]);
+			 samp3.push([i,tarr[i][7]]);
+			 samp4.push([i,tarr[i][6]]);
+			 
+
+
+
+
+			if(!(tarr[i][1] in destDist)){
+			
+			destDist[tarr[i][1]]=true;
+			select.options.add(new Option(tarr[i][1], tarr[i][1]));
+			}
+		}
+render(samp1,samp2,samp3,samp4);
+		}else{
+			alert(" Sorry No Data avaialble");
+			var select = document.getElementsByTagName('select')[2];
+			select.options.length = 0;
+		}
+		
+	}
+	$(document).ready(function () {
+	    var s1 = [[1, 700], [2, 700], [3, 700], [4, 700], [5, 700],
+	    [6, 700], [7, 700], [8, 700], [9, 700], [10, 700], [11, 650], [12, 650], [13, 650], [14, 650],[15,650],[16,650]];
+	    var s2 = [[1, 700], [2, 700], [3, 700], [4, 700], [5, 700],
+	              [6, 700], [7, 700], [8, 700], [9, 700], [10, 700], [11, 650], [12, 650], [13, 650], [14, 650],[15,650],[16,650]];
+	    var s3 = [[1, 700], [2, 700], [3, 700], [4, 700], [5, 700],
+	              [6, 700], [7, 700], [8, 700], [9, 700], [10, 700], [11, 650], [12, 650], [13, 650], [14, 650],[15,650],[16,650]];
+	    var s4 = [[1, 700], [2, 700], [3, 700], [4, 700], [5, 700],
+	              [6, 700], [7, 700], [8, 700], [9, 700], [10, 700], [11, 650], [12, 650], [13, 650], [14, 650],[15,650],[16,650]];
+
+
+	 
+	    plot1 = $.jqplot("chart1", [s4,s3,s2, s1,], {
+	        // Turns on animatino for all series in this plot.
+	        animate: true,
+	        // Will animate plot on calls to plot1.replot({resetAxes:true})
+	        animateReplot: true,
+	        cursor: {
+	            show: true,
+	            zoom: true,
+	            looseZoom: true,
+	            showTooltip: false
+	        },
+	        series:[
+	            {
+	                pointLabels: {
+	                    show: true
+	                },
+	                renderer: $.jqplot.BarRenderer,
+	                showHighlight: false,
+	                yaxis: 'y2axis',
+	                rendererOptions: {
+	                    // Speed up the animation a little bit.
+	                    // This is a number of milliseconds. 
+	                    // Default for bar series is 3000. 
+	                    animation: {
+	                        speed: 2500
+	                    },
+	                    barWidth: 15,
+	                    barPadding: -15,
+	                    barMargin: 0,
+	                    highlightMouseOver: false
+	                }
+	            },
+	            {
+	                rendererOptions: {
+	                    // speed up the animation a little bit.
+	                    // This is a number of milliseconds.
+	                    // Default for a line series is 2500.
+	                    animation: {
+	                        speed: 2000
+	                    }
+	                }
+	            }
+	        ],
+	        axesDefaults: {
+	            pad: 0
+	        },
+	        axes: {
+	            // These options will set up the x axis like a category axis.
+	            xaxis: {
+	                tickInterval: 1,
+	                drawMajorGridlines: false,
+	                drawMinorGridlines: true,
+	                drawMajorTickMarks: false,
+	                rendererOptions: {
+	                tickInset: 0.5,
+	                minorTicks: 1
+	            }
+	            },
+	            yaxis: {
+	                tickOptions: {
+	                    formatString: "$%'d"
+	                },
+	                rendererOptions: {
+	                    forceTickAt0: true
+	                }
+	            },
+	            y2axis: {
+	                tickOptions: {
+	                    formatString: "$%'d"
+	                },
+	                rendererOptions: {
+	                    // align the ticks on the y2 axis with the y axis.
+	                    alignTicks: true,
+	                    forceTickAt0: true
+	                }
+	            }
+	        },
+	        highlighter: {
+	            show: true,
+	            showLabel: true,
+	            tooltipAxes: 'y',
+	            sizeAdjust: 7.5 , tooltipLocation : 'ne'
+	        }
+	    });
+	   
+	});
+
+function render(s1,s2,s3,s4){
+$("#chart1").empty();
+
+	   	 
+	   	    plot1 = $.jqplot("chart1", [s4,s3,s2, s1,], {
+	   	        // Turns on animatino for all series in this plot.
+	   	        animate: true,
+	   	        // Will animate plot on calls to plot1.replot({resetAxes:true})
+	   	        animateReplot: true,
+	   	        cursor: {
+	   	            show: true,
+	   	            zoom: true,
+	   	            looseZoom: true,
+	   	            showTooltip: false
+	   	        },
+	   	        series:[
+	   	            {
+	   	                pointLabels: {
+	   	                    show: true
+	   	                },
+	   	                renderer: $.jqplot.BarRenderer,
+	   	                showHighlight: false,
+	   	                yaxis: 'y2axis',
+	   	                rendererOptions: {
+	   	                    // Speed up the animation a little bit.
+	   	                    // This is a number of milliseconds. 
+	   	                    // Default for bar series is 3000. 
+	   	                    animation: {
+	   	                        speed: 2500
+	   	                    },
+	   	                    barWidth: 15,
+	   	                    barPadding: -15,
+	   	                    barMargin: 0,
+	   	                    highlightMouseOver: false
+	   	                }
+	   	            },
+	   	            {
+	   	                rendererOptions: {
+	   	                    // speed up the animation a little bit.
+	   	                    // This is a number of milliseconds.
+	   	                    // Default for a line series is 2500.
+	   	                    animation: {
+	   	                        speed: 2000
+	   	                    }
+	   	                }
+	   	            }
+	   	        ],
+	   	        axesDefaults: {
+	   	            pad: 0
+	   	        },
+	   	        axes: {
+	   	            // These options will set up the x axis like a category axis.
+	   	            xaxis: {
+	   	                tickInterval: 1,
+	   	                drawMajorGridlines: false,
+	   	                drawMinorGridlines: true,
+	   	                drawMajorTickMarks: false,
+	   	                rendererOptions: {
+	   	                tickInset: 0.5,
+	   	                minorTicks: 1
+	   	            }
+	   	            },
+	   	            yaxis: {
+	   	                tickOptions: {
+	   	                    formatString: "Rs%'d"
+	   	                },
+	   	                rendererOptions: {
+	   	                    forceTickAt0: true
+	   	                }
+	   	            },
+	   	            y2axis: {
+	   	                tickOptions: {
+	   	                    formatString: "Rs%'d"
+	   	                },
+	   	                rendererOptions: {
+	   	                    // align the ticks on the y2 axis with the y axis.
+	   	                    alignTicks: true,
+	   	                    forceTickAt0: true
+	   	                }
+	   	            }
+	   	        },
+	   	        highlighter: {
+	   	            show: true,
+	   	            showLabel: true,
+	   	            tooltipAxes: 'y',
+	   	            sizeAdjust: 7.5 , tooltipLocation : 'ne'
+	   	        }
+	   	    });
+	   	   
+	   	
+}
+	
+</script>
+
+</html>
